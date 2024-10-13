@@ -1,4 +1,6 @@
-# 모던 자바스크립트 Deep Dive 북스터디
+# 모던 자바스크립트 Deep Dive 스터디
+
+<img src="./assets/img.png" alt="모던 자바스크립트 Deep Dive" width="300"/>
 
 ## ✅ 스터디 목표
 
