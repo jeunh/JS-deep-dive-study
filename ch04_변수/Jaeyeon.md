@@ -48,6 +48,52 @@
 - `변수 호이스팅`이란 변수 선언문이 코드의 선두로 끌어 올려진 것처럼 동작하는 것으로, 이 때문에 변수 선언의 위치와 상관없이 어디서든지 변수를 참조할 수 있다.
 - 변수 호이스팅이 일어나는 이유는 변수 선언을 포함한 모든 선언문이 **런타임**이 아니라 그 이전 단계인 **소스코드 평가 과정**에서 먼저 실행되기 때문이다.
 
+  #### 예제 4-10
+
+  ```
+  console.log(score);
+
+  score = 80;
+  var score;
+
+  console.log(score); // 해당 답은 80이다.
+  ```
+
+  위 문제는 이것과 동일하다.
+
+  ```
+  var score;
+  console.log(score);
+
+  score = 80;
+
+  console.log(score); // 80
+  ```
+
+  다만 아래의 예시의 경우 선언만 끌어올려지므로 주의해야 한다.
+  (참고: https://www.youtube.com/watch?v=3ZP3VPlrr0U&t=1027s)
+
+  ```
+  console.log(score);
+
+  score = 80;
+  var score=50;
+
+  console.log(score); // 50
+  ```
+
+  실제로 위 예시는 이렇게 동작한다. 즉, 선언만 끌어올려지고 할당 부분은 남는다.
+
+  ```
+  var score;
+  console.log(score); // undefined
+
+  score = 80;
+  score=50;
+
+  console.log(score); // 50
+  ```
+
 ### 4.5 값의 할당
 
 - 변수의 `할당`은 우변의 값을 좌변의 변수에 할당한다는 것이다.
@@ -76,7 +122,7 @@
 - 네이밍 컨벤션은 가독성 좋게 단어를 구분하기 위해 규정한 명명 규칙이다.
 
   ```
-  // 네이밍 컨벤션 예시
+  [네이밍 컨벤션 예시]
 
   var camelCase // 일반적인 변수나 함수 이름에 사용
   var PascalCase // 생성자 함수, 클래스 이름에 사용
