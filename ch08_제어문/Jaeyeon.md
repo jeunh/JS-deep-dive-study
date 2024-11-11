@@ -139,3 +139,45 @@ do {
    count++
 } while (count < 3);
 ```
+
+### break 문
+
+- break문은 레이블 문, 반복문, switch 문의 코드 블록을 탈출한다.
+- 레이블 문은 식별자가 붙은 문이다.
+
+```
+outerLoop: // 레이블 정의
+for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 5; j++) {
+        console.log(`i: ${i}, j: ${j}`);
+
+        // 특정 조건에서 이중 반복문을 한 번에 빠져나감
+        if (i === 2 && j === 3) {
+            console.log('조건을 만족했으므로 outerLoop를 빠져나갑니다.');
+            break outerLoop; // 레이블을 사용하여 outerLoop 반복문을 종료
+        }
+    }
+}
+
+console.log('반복문 종료');
+```
+
+### continue 문
+
+- continue 문은 반복문의 코드 블록 실행을 현 시점에서 중단하고 반복문의 증감식으로 실행 흐름을 이동시키며, break 문처럼 반복문을 탈출하지는 않는다.
+- if 문 내에서 실행해야 할 코드가 길다면 들여쓰기가 한 단계 더 깊어지므로 continue 문을 사용하는 편이 가독성이 좋다.
+
+```
+// continue 문을 사용하지 않으면 if 문 내에 코드를 작성해야 한다.
+for (var i=0; i < string.length; i++){
+  if(string[i] === search){
+    count++
+  }
+}
+
+// continue 문을 사용하면 if 문 밖에 코드를 작성할 수 있다.
+for (var i=0; i < string.length; i++){
+  if(string[i] !== search) continue;
+  count++
+}
+```
