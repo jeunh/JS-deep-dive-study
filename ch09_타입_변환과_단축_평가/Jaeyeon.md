@@ -209,3 +209,97 @@
   4. false && anything
 
   - 첫 번째 값이 false라 두 번째 값은 평가하지 않고 결과는 false
+
+- 단축평가를 사용하면 if문을 대체할 수 있다.
+
+  ```
+  var done = true;
+  var message = '';
+
+  message = done && '완료';
+  console.log(message); // 완료
+
+  done = false;
+
+  message = done || '미완료';
+  console.log(messages); // 미완료
+  ```
+
+- 단축평가는 다음과 같은 상황에서 유용하게 사용된다.
+
+  - 객체를 가리키기를 기대하는 변수가 null 또는 undefined가 아닌지 확인하고 프로퍼티를 참조할 때
+
+  ```
+  var elem = null;
+  var value = elem.value; // TypeError
+  var value = elem && elem.value; // null
+  ```
+
+  - 함수 매개변수에 기본 값을 설정할 때
+
+  ```
+  function getStringLength(str){
+      str = str || '';
+      return str.length;
+  }
+
+  getStringLength(); // 0
+  getStringLength('hi') // 2
+  ```
+
+### 옵셔널 체이닝 연산자
+
+- 옵셔널 체이닝 연산자 `?.`는 좌항의 피연산자가 null, undefined인 경우 undefined를 반환하고, 그렇지 않으면 우항의 프로퍼티 참조를 이어간다.
+
+  ```
+  var elem = null;
+  var value = elem?.value;
+  console.log(value); // undefined
+  ```
+
+- 논리형 연산자 `&&` 는 좌항 피연산자가 `false, undefined, null, 0, -0, NaN, ''` 등의 Falsy 값이면 좌항 피연산자를 그대로 반환한다. 옵셔널 체이닝 연산자는 null과 undefined가 아니면 우항의 프로퍼티 참조를 이어나가서 이런 경우 유리하게 사용할 수 있다.
+
+  ```
+  var str = '';
+
+  var length = str && str.length;
+  console.log(length); // '' (문자열의 길이를 참조하지 못한다)
+
+  var length = str?.length;
+  console.log(length); // 0 (null이나 undefined가 아니라면 문자열 길이를 참조한다)
+  ```
+
+### null 병합 연산자
+
+- null 병합 연산자 `??`는 좌항의 피연산자가 null 또는 undefined인 경우 우항의 피연산자를 반환하고, 그렇지 않으면 좌항의 피연산자를 반환한다.
+- 변수에 기본값을 설정할 때 유용하다.
+  ```
+  var foo = null ?? 'default string';
+  console.log(foo); // "default string"
+  ```
+- 논리 연산자 || 를 사용할 경우 좌항이 Falsy 값인 0이나 ''가 기본값으로 유효하다면 예기치 않은 동작이 발생할 수 있는데, `??` 연산자를 사용하면 좌항의 피연산자가 null이나 undefined가 아니면 좌항의 피연산자를 그대로 반환하여 유용하게 사용할 수 있다.
+
+  ```
+  var Foo = '' || 'default string';
+  console.log(foo) // "default string'
+
+  var foo = '' ?? 'default string'
+  console.log(foo) // ''
+  ```
+
+- ?? 와 옵셔널 체이닝이 헷갈려서 위 예시를 옵셔널 체이닝으로 바꿔보았다.
+
+  ```
+  const obj1 = { value: '' };
+  const obj2 = null;
+
+  // 옵셔널 체이닝 사용 예시
+  const result1 = obj1?.value || 'default string';
+  console.log(result1); // "default string" (obj1.value가 ''이므로 Falsy)
+
+  const result2 = obj1?.value ?? 'default string';
+  console.log(result2); // "" (obj1.value가 Falsy이지만 null/undefined가 아니므로 그대로 반환)
+
+  const result3 = obj2?.value ?? 'default string';
+  console.log(result3); // "default string" (obj2가 null이므로 우항 반환)
+  ```
