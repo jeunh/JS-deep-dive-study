@@ -33,7 +33,7 @@ var counter = {
 
 - C++나 자바 같은 클래스 기반 객체지향 언어는 클래스를 사전에 정의하고 필요한 시점에 new 연산자와 함께 생성자(constructor)를 호출하여 인스턴스를 생성하는 방식으로 객체를 생성한다.
   (인스턴스란 클래스에 의해 생성되어 메모리에 저장된 실체란다.)
-- 자바스크립트는 프로토타입 기반 객체지향 언어로서 클래스 기반 객체지향 언어와 달리 다양한 객체 생성 방법을 지원한다.(참고: https://velog.io/@huurray/Javascript%EB%8A%94-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EA%B8%B0%EB%B0%98-%EC%96%B8%EC%96%B4%EC%9D%B4%EB%8B%A4)
+- 자바스크립트는 `프로토타입 기반` 객체지향 언어로서 클래스 기반 객체지향 언어와 달리 다양한 객체 생성 방법을 지원한다.(참고: https://velog.io/@huurray/Javascript%EB%8A%94-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EA%B8%B0%EB%B0%98-%EC%96%B8%EC%96%B4%EC%9D%B4%EB%8B%A4)
 
 ```
 프로토타입(prototype)이라고 하면 일반적으로 자바스크립트만을 떠올리지만 사실 프로토타입은 자바스크립트에서만 사용되는 것은 아니고 하나의 디자인 패턴이다.
@@ -88,4 +88,143 @@ var foo={
     name: 'Kim'
 }
 console.log(foo); // {name: 'Kim'}
+```
+
+## 메서드
+
+- 프로퍼티 값이 함수일 경우 일반 함수와 구분하기 위해 `메서드`라 부른다. 즉, 메서드는 객체에 묶여 있는 함수이다.
+
+```
+var counter = {
+    num: 0, // 프로퍼티
+    increase: function () { // <- 메서드
+        this.num++; // this는 counter를 가르킨다.
+    }
+}
+
+console.log(counter.counter()); // 1
+```
+
+## 프로퍼티 접근
+
+- 프로퍼티에 접근하는 방법으로는 마침표 표기법과 대괄호 표기법이 있다.
+
+### 마침표 표기법
+
+이렇게 적으면 된다.
+
+```
+var person = {
+    name: 'Lee'
+}
+
+console.log(person.name) // 'Lee'
+```
+
+### 대괄호 표기법
+
+- 프로퍼티 키는 반드시 따옴표로 감싼 문자열이어야 한다. 그렇지 않으면 식별자로 해석한다.
+
+```
+var person = {
+    name: 'Lee'
+}
+
+console.log(person[name]) // reference error: name is not defined
+```
+
+- 객체에 존재하지 않는 프로퍼티에 접근하면 undefined를 반환한다.
+
+```
+var person = {
+    name: 'Lee'
+}
+
+console.log(person.age); // undefined
+```
+
+- 프로퍼티 키가 식별자 네이밍 규칙을 준수하지 않는 이름이라면 반드시 대괄호 표기법을 사용해야 하고 따옴표를 써야 한다.
+
+## 프로퍼티 값 갱신
+
+- 이미 존재하는 프로퍼티에 값을 할당하면 프로퍼티 값이 갱신된다.
+
+```
+var person = {
+    name: 'Lee'
+}
+
+person.name = 'Kim'
+console.log(person.name); // {name: 'Kim'}
+```
+
+## 프로퍼티 동적 생성
+
+- 존재하지 않는 프로퍼티에 값을 할당하면 프로퍼티가 동적으로 생성되어 추가되고 프로퍼티 값이 할당된다.
+
+```
+var person = {
+    name: 'Lee'
+};
+
+person.age = 20;
+console.log(person); // {name: 'Lee', age: 20}
+```
+
+## 프로퍼티 삭제
+
+- delete연산자를 사용한다.
+
+```
+var person = {
+    name: 'Lee',
+    age: 20
+};
+
+delete person.age;
+console.log(person); // {name: 'Lee'}
+```
+
+## ES6에서 추가된 객체 리터럴의 확장 기능
+
+### 프로퍼티 축약 표현
+
+- ES6에서는 프로퍼티 값으로 변수를 사용하는 경우 변수 이름과 프로퍼티 키가 동일한 이름일 때 프로퍼티를 생략할 수 있다.
+
+```
+let x=1, y=2;
+const obj = {x,y}
+console.log(obj); //{x:1, y:2}
+```
+
+### 계산된 프로퍼티 이름
+
+- ES6에서 프로퍼티 이름을 대괄호 표기법을 사용해서 동적 생성할 수 있다.
+
+```
+const prefix = 'prop';
+let i=0;
+
+const obj = {
+    [`${prefix}-${++i}`]: i,
+    [`${prefix}-${++i}`]: i,
+    [`${prefix}-${++i}`]: i,
+}
+
+console.log(obj); // {prop-1: 1, prop-2: 2, prop-3: 3}
+```
+
+### 메서드 축약 표현
+
+- ES6에서는 메서드를 정의할 때 function 키워드를 생략한 축약 표현을 사용할 수 있다.
+
+```
+var obj={
+    name: 'kim',
+    lastname(){
+        return this.name.substring(0,1)
+    }
+}
+
+obj.lastname(); // 'k'
 ```
