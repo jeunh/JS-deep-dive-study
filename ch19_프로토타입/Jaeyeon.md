@@ -85,3 +85,94 @@ console.log(circle2.getArea()); // 12.566370614359172
 
 - `__proto__`는 원래 표준이 아니라 비표준 방식이었고, 모든 객체가 `__proto__`를 사용할 수 있는 것도 아니다.
 - 때문에 Object.getPrototypeOf(obj)나 Object.setPrototypeOf(obj, newProto) 같은 공식 메서드를 쓰는 것이 좋다.
+
+### 함수 객체의 Prototype 프로퍼티
+
+- 함수 객체만이 소유하는 prototype 프로퍼티는 생성자 함수가 생성할 인스턴스의 프로토타입을 가리킨다.
+- prototype 프로퍼티는 생성자 함수가 생성할 객체(인스턴스)의 프로토타입을 가리킨다. 따라서 생성자 함수로서 호출할 수 없는 함수, 즉 Non-constructor인 화살표 함수와 ES6 메서드 축약 표현으로 정의한 메서드는 Prorotype 프로퍼티를 소유하지 않으며 프로토타입도 생성하지 않는다.
+
+```
+function Person(name) {
+  this.name = name;
+}
+
+console.log(Person.hasOwnProperty('prototype')); // true
+// prototype 프로퍼티에는 constructor 프로퍼티가 포함되며, 이 constructor는 원래의 Person 함수를 가리킴.
+console.log(Person.prototype); // { constructor: Person }
+
+```
+
+- `__proto__`와 `prototype`은 결국 같은 프로토타입을 가리킨다. "누가 누구의 프로토타입을 가리키는지" 이해하는 게 중요하다.
+
+```
+function Person(name) {
+  this.name = name;
+}
+
+const me = new Person('Lee');
+
+// prototype은 생성자 함수의 속성 -> Person.prototype
+// __proto__는 인스턴스의 속성 -> me.__proto__
+console.log(Person.prototype === me.__proto__); // true
+```
+
+### 프로토타입의 constructor 프로퍼티와 생성자 함수
+
+- 모든 프로토타입은 constructor 프로퍼티를 갖는다. 이 constructor 프로퍼티는 prototype 프로퍼티로 자신을 참조하고 있는 생성자 함수를 가리킨다.
+
+```
+// 생성자 함수
+function Person(name){
+    this.name = name;
+}
+const me = new Person('Lee')
+// me 객체의 생성자 함수는 Person이다
+console.log(me.constructor === Person); // true
+```
+
+## 리터럴 표기법에 의해 생성된 객체의 생성자 함수와 프로토타입
+
+- 리터럴 표기법은 인스턴스를 생성하지 않는 객체 생성 방식이다.
+
+  ```
+  // 객체 리터럴
+  const obj = {}
+
+  // 함수 리터럴
+  const add = function(a,b){return a+b}
+
+  // 배열 리터럴
+  const arr = [1,2,3]
+  ```
+
+- Object 생성자 함수와 객체 리터럴이 내부적으로 같은 방식으로 객체를 생성한다
+
+  ```
+  const obj1 = {}; // 객체 리터럴
+  const obj2 = new Object(); // Object 생성자 함수 사용
+
+  console.log(obj1.__proto__ === obj2.__proto__); // true
+  ```
+
+- {}(객체 리터럴)와 new Object()은 객체를 만드는 방식은 다르지만, 결과적으로 같은 프로토타입을 공유하는 객체가 생성된다.
+- 객체 리터럴에 의해 생성된 객체는 Object 생성자 함수가 생성한 객체가 아니다.
+- 객체 리터럴로 생성된 객체는 constructor 프로퍼티를 통해 Object 생성자 함수와 연결된다.
+  ```
+  const obj = {};
+  console.log(obj.constructor === Object); // true
+  ```
+- 일반 함수와 생성자 함수도 위와 마찬가지로 둘 다 constructor 프로퍼티를 가진다.
+  ```
+  function foo(){}
+  // foo의 생성자 함수는 Function 생성자 함수다.
+  console.log(foo.constructor === Function)
+  ```
+- 다시 말해, 프로토타입과 생성자 함수는 단독으로 존재할 수 없고 언제나 쌍으로 존재한다.
+- 리터럴 표기법에 의해 생성된 객체의 생성자 함수와 프로토타입은 다음과 같다.
+
+| 리터럴 표기법      | 생성자 함수 | 프로토타입         |
+| ------------------ | ----------- | ------------------ |
+| 객체 리터럴        | Object      | Object.prototype   |
+| 함수 리터럴        | Function    | Function.prototype |
+| 배열 리터럴        | Array       | Array.prototype    |
+| 정규 표현식 리터럴 | RegExp      | RegExp.prototype   |
