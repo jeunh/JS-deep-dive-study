@@ -64,19 +64,68 @@
 
 ## 클로저의 활용
 - 클로저는 상태가 의도치 않게 변경되지 않도록 안전하게 은닉하고 특정 함수에게만 상태 변경을 허용하여 상태를 안전하게 변경하고 유지하기 위해 사용한다.
-```
-// 카운트 상태 변경 함수
-const increase = (function () {
-    // 카운트 상태 변수
-    let num = 0;
-    // 클로저
-    return function () {
-        // 카운트 상태를 1만큼 증가시킨다.
-        return ++num;
-    }
-}())
+    ```
+    // 카운트 상태 변경 함수
+    const increase = (function () {
+        // 카운트 상태 변수
+        let num = 0;
+        // 클로저
+        return function () {
+            // 카운트 상태를 1만큼 증가시킨다.
+            return ++num;
+        }
+    }())
 
-console.log(increase()); //1
-console.log(increase()); //2
-console.log(increase()); //3
-```
+    console.log(increase()); //1
+    console.log(increase()); //2
+    console.log(increase()); //3
+    ```
+    ![alt text](image-6.png)
+    - num은 외부에서 접근 못해서 은닉된 변수
+    - 특정 함수(increase)를 사용해야만 상태 변경이 가능
+
+    ## 캡슐화와 정보 은닉
+    - 캡슐화는 객체의 상태를 나타내는 프로퍼티와 프로퍼티를 참조하고 조작할 수 있는 동작인 메서드를 하나로 묶는 것을 말한다.
+    - 캡슐화는 객체의 특정 프로퍼티나 메서드를 갑출 목적으로 사용하기도 하는데 이를 정보 은닉이라 한다. 
+    - 자바스크립트 객체의 모든 프로퍼티와 메서드는 기본적으로 public하다. public, private, protected 같은 접근 제한자를 제공하지 않는다.
+    - 그런데 2021년에 private 필드를 정의할 수 있는 새로운 표준 사양에 제안되었다고 한다. 변수 앞에 #을 붙이면 된다.
+    ![alt text](image-7.png)
+
+    ## 자주 발생하는 실수
+    - 아래는 클로저를 사용할 때 발생하는 잘못된 예시이다. 
+        ```
+        var funcs = [];
+        for (var i=0; i<3; i++){
+            funcs[i] = function() {return i++}; 
+        }
+        for(var j=0; j<funcs.length; j++){
+            console.log(funcs[j]());
+        }
+        ```
+        ![alt text](image-8.png)
+        ![alt text](image-9.png)
+        ![alt text](image-10.png)
+        ![alt text](image-11.png)
+
+        - return i 에서 0,1,2가 되길 기대하겠지만(기대 안함..) i는 전역 컨텍스트 i를 참조하여 3부터 return한다.
+
+        ```
+        var funcs = [];
+        
+        for (var i=0; i<3; i++){
+            funcs[i] = ( function(id) {
+                return function(){
+                    return id;
+                };
+            }(i));
+        }
+        
+        for(var j=0; j<funcs.length; j++){
+            console.log(funcs[j]());
+        }
+        ```
+
+    - 클로저를 사용해 위 예제를 바르게 동작하는 코드로 만들 수 있다. 누가 이렇게 하죠!?
+    - 즉시 실행함수에 인자 i를 넘겨서 i가 0인 클로저 하나, i가 1인 클로저 하나, i가 2인 클로저 하나 이렇게 만들 수 있다.
+
+    - 간단하게 let을 사용하면 블록 스코프 내에서만 적용되므로 문제가 해결된다.
