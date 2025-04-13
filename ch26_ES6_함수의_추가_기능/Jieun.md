@@ -266,3 +266,66 @@
   ```
 
 ## 26.4 Rest 파라미터
+### 26.4.1 기본 문법
+- Rest 파라미터는 매개변수 이름 앞에 세개의 점...을 붙여서 정의한 매개변수를 의미한다. 
+- Rest 파라미터는 함수에 전달된 인수들의 목록을 배열로 전달받는다
+  ```
+  function foo(...rest) {
+    console.log(rest); // [ 1, 2, 3, 4, 5 ] 
+  }
+  foo(1, 2, 3, 4, 5);
+
+  // 일반 매개변수와 Rest 파라미터는 함께 사용할 수 있다
+  function bar(paraml, param2, ... rest) {
+    console.log(paraml); // 1
+    console.log(param2); // 2
+    console.log(rest); // [ 3, 4, 5 ]
+  }
+  bar(1, 2, 3, 4, 5);
+  ```
+- Rest 파라미터는 반드시 마지막 파라미터이어야 한다.
+- Rest 파라미터는 함수 정의 시 선언한 매개변수 개수를 나타내는 함수 객체의 length 프로퍼티에 영향을 주지 않는다.
+  ```
+  function foo( ... rest) {} 
+  console.log(foo.length); // 0
+  
+  function bar(x, y, ... rest) {} 
+  console.log(bar.length); // 2
+  ```
+
+## 26.5 매개변수 기본값
+- 인수가 전달되지 않은 매개변수의 값은 undefined 이다.
+  ```
+  function sum(x, y) { 
+    return x + y;
+  }
+  console.log(sum(1)); // NaN
+  ```
+- 인수가 전달되지 않은 경우 매개변수에 기본값을 할당할 필요가 있다. 즉, 방어 코드가 필요하다.
+  ```
+  function sum(x, y) {
+    x = x || 0;
+    y = y || 0;
+    return x + y;
+  }
+  console.log(sum(1, 2)); // 3
+  console.log(sum(1));    // 1
+  ```
+- ES6에서 도입된 매개변수 기본값을 사용하면 함수 내에서 수행하던 인수 체크 및 초기화를 간소화할 수 있다.
+- 매개변수 기본값은 매개변수에 인수를 전달하지 않은 경우와 undefined를 전달한 경우에만 유효하다.
+  ```
+  function sum(x = 0, y = 0) { 
+    return x + y;
+  }
+  console.log(sum(1, 2));         // 3
+  console.log(sum(1));            // 1
+  console.log(sum(undefined, 2)); // 2
+  ```
+- Rest 파라미터에는 기본값을 지정할 수 없다.
+  ```
+  function foo(...rest = []) { 
+    console.log(rest);
+  }
+  // SyntaxError: Rest parameter may not have a default initializer
+  ```
+
