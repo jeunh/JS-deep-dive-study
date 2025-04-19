@@ -14,7 +14,7 @@
   - 단점: 정렬되지 않은 배열에서 특정한 요소를 검색하는 경우 특정 요소를 발견할 때까지 처음부터 차례대로 검색해야 한다. 배열에 요소를 삽입하거나 삭제하는 경우 배열의 요소를 연속적으로 유지하기 위해 요소를 이동시켜야한다.
 - 자바스크립트 배열
   - 배열의 요소를 위한 각각의 메모리 공간은 동일한 크기를 갖지 않아도 되며, 연속적으로 이어져 있지 않을 수 있다. 배열의 요소가 연속적으로 이어져 있지 않는 배열을 **희소 배열**이라 한다.
-  - 자바스크립트 배열은 일반적인 배열의 동적을 흉내 낸 특수한 객체다.
+  - 자바스크립트 배열은 일반적인 배열의 동작을 흉내 낸 특수한 객체다.
   - 장점: 특정 요소를 검색하거나 요소를 삽입 또는 삭제하는 경우에는 일반적인 배열보다 빠르다.
   - 단점: 인덱스로 배열 요소에 접근하는 경우에는 일반적인 배열보다 느리다.
 
@@ -28,7 +28,7 @@
     // 현재 length 프로퍼티 값인 5보다 작은 숫자 값 3을 length 프로퍼티에 할당 
     arr.length = 3;
 
-    // 배열의 길이가 5에서 1으로 줄어든다. 
+    // 배열의 길이가 5에서 3으로 줄어든다. 
     console.log(arr); // [1, 2, 3]
     ```
     ```
@@ -341,4 +341,164 @@
   - 팝: 스택에서 데이터를 꺼내는 것
   
   ![스택](image.png)
+
+### 27.8.5 Array.prototype.unshift
+- unshift 메서드는 인수로 전달받은 모든 값을 원본 배열의 선두에 요소로 추가하고 변경된 length 프로퍼티 값을 반환한다.
+- unshift 메서드는 원본 배열을 직접 변경한다.
+  ```
+  const arr = [1, 2];
+
+  let result = arr.unshift(3, 4);
+  console.log(result); // 4
+  console.log(arr);    // [3, 4, 1, 2]
+  ```
+- unshift 메서드는 원본 배열을 직접 변경하는 부수 효과가 있기 때문에 ES6의 스프레드 문법을 사용하는 것이 좋다.
+  ```
+  const arr = [1, 2];
+
+  const newArr = [3, ...arr];
+  console.log(newArr); // [3, 1, 2]
+  console.log(arr);    // [1, 2]
+  ```
+
+### 27.8.6 Array.prototype.shift
+- shift 메서드는 원본 배열에서 첫 번째 요소를 제거하고 제거한 요소를 반환한다.
+- 원본 배열이 빈 배열이면 undefined를 반환한다.
+- shift 메서드는 원본 배열을 직접 변경한다.
+  ```
+  const arr = [1, 2];
+
+  let result = arr.shift();
+  console.log(result); // 1
+  console.log(arr);    // [2]
+  ```
+- 큐: 선입선출(FIFO - First In First Out) 방식의 자료구조
+![큐](image-1.png)
+
+### 27.8.7 Array.prototype.concat
+- concat 메서드는 인수로 전달된 값들(배열 또는 원시값)을 원본 배열의 마지막 요소로 추가한 새로운 배열을 반환한다.
+- 인수로 전달한 값이 배열인 경우 배열을 해체하여 새로운 배열의 요소로 추가한다.
+- 원본 배열은 변경되지 않는다.
+  ```
+  const arr1 = [1, 2];
+  const arr2 = [3, 4];
+
+  let result = arr1.concat(arr2);
+  console.log(result); // [1, 2, 3, 4]
+
+  result = arr1.concat(3);
+  console.log(result); // [1, 2, 3]
+
+  result = arr.concat(arr2, 5);
+  console.log(result); // [1, 2, 3, 4, 5]
+
+  console.log(arr1); // [1, 2]
+  ```
+- push와 unshift 메서드는 concat 메서드와 유사하게 동작하지만 다음과 같이 미묘한 차이가 있다.
+  - push와 unshift: 원본 배열을 직접 변경, 원본 배열을 반드시 변수에 저장해 두어야 한다.
+    concat: 원본 배열을 변경하지 않고 새로운 배열을 반환, 반환값을 반드시 변수에 할당받아야 한다.
+  - 인수로 전달받은 값이 배열인 경우 push와 unshift 메서드는 배열을 그대로 원본 배열의 마지막/첫 번째 요소로 추가하지만 concat 메서드는 인수로 전달받은 배열을 해체하여 새로운 배열의 마지막 요소로 추가한다.
+    ```
+    const arr = [3, 4];
+
+    arr.unshift([1, 2]);
+    arr.push([5, 6]);
+    console.log(arr); // [[1, 2], 3, 4, [5, 6]]
+
+    let result = [1, 2].concat([3, 4]);
+    result = result.concat([5, 6]);
+    console.log(result); // [1, 2, 3, 4, 5, 6]
+    ```
+- concat 메서드는 ES6 스프레드 문법으로 대체할 수 있다.
+  ```
+  let result = [...[1, 2], ...[3, 4]];
+  console.log(result); // [1, 2, 3, 4]
+  ```
+- **push/unshift 메서드와 concat 메서드를 사용하는 대신 ES6의 스프레드 문법을 일관성 있게 사용하는 것을 권장한다.**
+
+### 27.8.8 Array.prototype.splice
+- 원본 배열의 중간에 요소를 추가하거나 중간에 있는 요소를 제거하는 경우 splice 메서드를 사용한다. 
+- splice 메서드는 3개의 매개변수가 있으며 원본 배열을 직접 변경한다.
+  - start: 원본 배열의 요소를 제거하기 시작할 인덱스다. start만 지정하면 원본 배열의 start부터 모든 요소를 제거한다 start가 음수인 경우 배열의 끝에서의 인덱스를 나타낸다. 만약 start가 -1이면 마지막 요소를 가리키고 -n이면 마지막에서 n번째 요소를 가리킨다.
+  - deleteCount: 원본 배열의 요소를 제거하기 시작할 인덱스인 start부터 제거할 요소의 개수다. deleteCount가 0인 경우 아무런 요소도 제거되지 않는다(옵션).
+  - items: 제거한 위치에 삽입할 요소들의 목록이다. 생략할 경우 원본 배열에서 요소들을 제거하기만 한다(옵션).
+- 제거한 요소가 배열로 반환된다.
+  ```
+  const arr = [1, 2, 3, 4];
+
+  // 원본 배열의 인덱스 1부터 2개의 요소를 제거하고 그 자리에 새로운 요소 20, 30을 삽입한다.
+  const result = arr.splice(1, 2, 20, 30);
+
+  console.log(result); // [2, 3]
+  console.log(arr); // [1, 20, 30, 4]
+  ```
+  ```
+   const arr = [1, 2, 3, 4];
+
+   // 원본 배열의 인덱스 1부터 0개의 요소를 제거하고 그 자리에 새로운 요소 100을 삽입한다.
+   const result = arr.splice(1, 0, 100);
+ 
+   console.log(arr); // [l, 100, 2, 3, 4]
+   console.log(result); // []
+  ```
+  ```
+  const arr = [1, 2, 3, 4];
+
+  // 원본 배열의 인덱스 1부터 2개의 요소를 제거한다.
+  const result = arr.splice(1, 2);
+ 
+  console.log(arr); // [1, 4]
+  console.log(result); // [2, 3]
+  ```
+  ```
+  const arr = [1, 2, 3, 4];
+
+  // 원본 배열의 인덱스 1부터 모든 요소를 제거한다.
+  const result = arr.splice(1);
+  
+  console.log(arr); // [1]
+  console.log(result); // [2, 3, 4]
+  ```
+  
+### 27.8.9 Array.prototype.slice
+- slice 메서드는 인수로 전달된 범위의 요소들을 복사하여 배열로 반환한다.
+- 2개의 매개변수가 있으며, 원본 배열은 변경되지 않는다.
+  - start: 복사를 시작할 인덱스다. 음수인 경우 배열의 끝에서의 인덱스를 나타낸다. 예를 들어, slice(-2)는 배열의 마지막 두 개의 요소를 복사하여 배열로 반환한다.
+  - end: 복사를 종료할 인덱스다. 이 인덱스에 해당하는 요소는 복사되지 않는다. end는 생략 가능하며 생략 시 기본값은 length 프로퍼티 값이다.
+  ```
+  const arr = [1, 2, 3];
+
+  arr.slice(0, 1); // → [1]
+  arr.slice(1, 2); // → [2]
+  
+  arr.slice(1); // → [2, 3]
+  
+  arr.slice(-1) // → [3]
+  arr.slice(-2); // → [2, 3]
+
+  // 인수를 모두 생략하면 원본 배열의 복사본을 생성하여 반환한다(얕은 복사)
+  const copy = arr.slice();
+  console.log(copy); // [1, 2, 3]
+  console.log(copy === arr); // false
+  
+  console.log(arr); // [1, 2, 3]
+  ```
+  
+- 얕은 복사는 객체의 첫 번째 레벨만 복사하고, 중첩된 객체는 참조를 공유한다.
+  ```
+  // 원본 배열
+  let arr1 = [1, 2, 3, { name: 'John' }, [4, 5]];
+
+  // slice()를 이용한 얕은 복사
+  let arr2 = arr1.slice();
+
+  // 배열 내부의 객체나 배열은 여전히 원본과 같은 참조를 가짐
+  arr2[3].name = 'Doe';   // 객체 내부의 속성 변경
+  arr2[4][0] = 100;       // 배열 내부 값 변경
+
+  console.log(arr1);  // [1, 2, 3, { name: 'Doe' }, [100, 5]]
+  console.log(arr2);  // [1, 2, 3, { name: 'Doe' }, [100, 5]]
+
+  ```
+
 
