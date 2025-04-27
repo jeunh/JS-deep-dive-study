@@ -1,250 +1,151 @@
-## 28.1 Number 생성자 함수
+## 29 Math
 
-표준 빌트인 객체 Number는 원시 타입인 숫자를 다룰 때 유용한 프로퍼티와 메서드를 제공.
+표준 빌트인 객체인 Math는 수학적인 상수와 함수를 위한 프로퍼티와 메서드를 제공.
+Math는 생성자 함수가 아니므로 인스턴스를 생성할 수 없음. 오직 정적 프로퍼티와 메서드만 제공.
 
-### Number 생성자 함수
+## 29.1 Math 프로퍼티
 
-- 표준 빌트인 객체인 Number 객체는 생성자 함수 객체.
-- `new` 연산자와 함께 호출할 경우 Number 래퍼 객체를 생성.
-- 인수 없이 `new Number()` 호출 시 [[NumberData]] 내부 슬롯 값은 0이 됨.
+### 29.1.1 Math.PI
+
+- 원주율 \(\pi \) 값을 반환.
 
 ```js
-const numObj = new Number();
-console.log(numObj); // Number {[[PrimitiveValue]]: 0}
+Math.PI; // 3.141592653589793
 ```
 
-- 인수로 숫자를 전달하면 해당 값을 할당함.
-- 숫자가 아닌 값을 전달하면 강제 변환 후 할당. 변환 불가능할 경우 NaN 할당.
+## 29.2 Math 메서드
+
+### 29.2.1 Math.abs
+
+- 인수로 전달된 숫자의 절대값을 반환.
+- 절대값은 반드시 0 또는 양수.
 
 ```js
-const numObj1 = new Number(10);
-console.log(numObj1); // Number {[[PrimitiveValue]]: 10}
-
-const numObj2 = new Number('10');
-console.log(numObj2); // Number {[[PrimitiveValue]]: 10}
-
-const numObj3 = new Number('Hello');
-console.log(numObj3); // Number {[[PrimitiveValue]]: NaN}
+Math.abs(-1);    // 1
+Math.abs('-1');  // 1
+Math.abs('');    // 0
+Math.abs([]);    // 0
+Math.abs(null);  // 0
+Math.abs(undefined); // NaN
+Math.abs({});    // NaN
+Math.abs('string'); // NaN
+Math.abs();      // NaN
 ```
 
-- 명시적 타입 변환 예시
+### 29.2.2 Math.round
+
+- 인수로 전달된 숫자의 소수점 이하를 반올림한 정수를 반환.
 
 ```js
-Number('0');     // 0
-Number('-1');    // -1
-Number('10.53'); // 10.53
-Number(true);    // 1
-Number(false);   // 0
+Math.round(1.4);    // 1
+Math.round(1.6);    // 2
+Math.round(-1.4);   // -1
+Math.round(-1.6);   // -2
+Math.round();       // NaN
 ```
 
-## 28.2 Number 프로퍼티
+### 29.2.3 Math.ceil
 
-### 28.2.1 Number.EPSILON
-
-- 1과 1보다 큰 수 사이에서 표현할 수 있는 가장 작은 값.
-- 부동소수점 연산의 오차를 해결할 때 사용.
+- 인수로 전달된 숫자의 소수점 이하를 올림한 정수를 반환.
 
 ```js
-0.1 + 0.2;             // 0.30000000000000004
-0.1 + 0.2 === 0.3;     // false
+Math.ceil(1.4);    // 2
+Math.ceil(1.6);    // 2
+Math.ceil(-1.4);   // -1
+Math.ceil(-1.6);   // -1
+Math.ceil();       // NaN
 ```
 
-```js
-function isEqual(a, b) {
-  // a와 b를 뺀 값의 절대값이 Number.EPSILON보다 작으면 같은 수로 인정
-  return Math.abs(a - b) < Number.EPSILON;
-}
+### 29.2.4 Math.floor
 
-isEqual(0.1 + 0.2, 0.3); // true
+- 인수로 전달된 숫자의 소수점 이하를 내림한 정수를 반환.
+
+```js
+Math.floor(1.9);    // 1
+Math.floor(0.9);    // 0
+Math.floor(-1.9);   // -2
+Math.floor(-0.9);   // -1
+Math.floor(1);      // 1
+Math.floor();       // NaN
 ```
 
-- 부동소수점은 2진수로 실수를 표현하는 방식으로, 무한히 정확히 표현할 수 없는 경우가 많음.
-- 1과 1보다 큰 수 사이에서 표현 가능한 가장 작은 간격을 Number.EPSILON으로 정의함.
-- 이 값을 기준으로 수의 근접성을 비교할 수 있음.
+### 29.2.5 Math.sqrt
 
-### 28.2.2 Number.MAX_VALUE
-
-- 자바스크립트에서 표현할 수 있는 가장 큰 숫자 값.
+- 인수로 전달된 숫자의 제곱근을 반환.
 
 ```js
-Number.MAX_VALUE; // 1.7976931348623157e+308
-Infinity > Number.MAX_VALUE; // true
+Math.sqrt(9);    // 3
+Math.sqrt(-9);   // NaN
+Math.sqrt(2);    // 1.414213562373095
+Math.sqrt(1);    // 1
+Math.sqrt();     // NaN
 ```
 
-### 28.2.3 Number.MIN_VALUE
+### 29.2.6 Math.random
 
-- 표현할 수 있는 가장 작은 양수 값.
+- 0 이상 1 미만의 난수(랜덤 숫자)를 반환.
 
 ```js
-Number.MIN_VALUE; // 5e-324
-Number.MIN_VALUE > 0; // true
+Math.random(); // 예: 0.8208720231391746
 ```
 
-### 28.2.4 Number.MAX_SAFE_INTEGER
-
-- 안전하게 표현할 수 있는 가장 큰 정수값.
+- 예제: 1~10 범위의 정수 구하기
 
 ```js
-Number.MAX_SAFE_INTEGER; // 9007199254740991
+const random = Math.floor((Math.random() * 10) + 1);
+console.log(random); // 1~10 범위의 정수
 ```
 
-### 28.2.5 Number.MIN_SAFE_INTEGER
+### 29.2.7 Math.pow
 
-- 안전하게 표현할 수 있는 가장 작은 정수값.
+- 첫 번째 인수를 밑(base)으로, 두 번째 인수를 지수(exponent)로 거듭제곱한 결과를 반환.
 
 ```js
-Number.MIN_SAFE_INTEGER; // -9007199254740991
+Math.pow(2, 8);   // 256
+Math.pow(2, -1);  // 0.5
+Math.pow(2);      // NaN
 ```
 
-### 28.2.6 Number.POSITIVE_INFINITY
-
-- 양의 무한대를 나타내는 값.
+- ES7에서는 지수 연산자(`**`)를 사용 가능.
 
 ```js
-Number.POSITIVE_INFINITY; // Infinity
+2 ** 2 ** 2;      // 16
+Math.pow(Math.pow(2, 2), 2); // 16
 ```
 
-### 28.2.7 Number.NEGATIVE_INFINITY
+### 29.2.8 Math.max
 
-- 음의 무한대를 나타내는 값.
+- 전달받은 인수 중 가장 큰 수를 반환. 인수가 없으면 -Infinity 반환.
 
 ```js
-Number.NEGATIVE_INFINITY; // -Infinity
+Math.max(1);         // 1
+Math.max(1, 2);      // 2
+Math.max(1, 2, 3);   // 3
+Math.max();          // -Infinity
 ```
 
-### 28.2.8 Number.NaN
-
-- 숫자가 아님(Not-a-Number)을 나타내는 값.
+- 배열 요소 중 최대값 구하기
 
 ```js
-Number.NaN; // NaN
+Math.max.apply(null, [1, 2, 3]); // 3
+Math.max(...[1, 2, 3]);          // 3 (ES6 스프레드 문법)
 ```
 
-## 28.3 Number 메서드
+### 29.2.9 Math.min
 
-### 28.3.1 Number.isFinite
-
-- 인수가 정상적인 유한수인지 검사하여 불리언 값 반환.
+- 전달받은 인수 중 가장 작은 수를 반환. 인수가 없으면 Infinity 반환.
 
 ```js
-Number.isFinite(0);           // true
-Number.isFinite(Number.MAX_VALUE); // true
-Number.isFinite(Number.MIN_VALUE); // true
-Number.isFinite(Infinity);    // false
-Number.isFinite(-Infinity);   // false
-Number.isFinite(NaN);         // false
+Math.min(1);         // 1
+Math.min(1, 2);      // 1
+Math.min(1, 2, 3);   // 1
+Math.min();          // Infinity
 ```
 
-- 빌트인 전역 함수 `isFinite`는 전달된 값을 숫자로 변환 후 검사하는 반면, `Number.isFinite`는 변환하지 않음.
+- 배열 요소 중 최소값 구하기
 
 ```js
-Number.isFinite(null); // false
-isFinite(null);        // true
-```
-
-### 28.3.2 Number.isInteger
-
-- 인수가 정수인지 검사하여 불리언 값 반환.
-- 인수를 변환하지 않고 검사.
-
-### 28.3.3 Number.isNaN
-
-- 빌트인 전역 함수 isNaN은 암묵적 타입 변환을 하는데 이것과 다름 주의
-- 전달받은 인수의 숫자값이 NaN인지 판별 후 불리언 값으로 반환함
-
-```js
-Number.isNaN(NaN); // true
-Number.isNaN(undefined); // false
-isNaN(undefined);        // true
-```
-
-### 28.3.4 Number.isSafeInteger
-
-- 인수가 안전한 정수인지 검사하여 불리언 값 반환.
-- 안전한 정수는 -(2^53 - 1)과 2^53 - 1 사이의 값.
-
-```js
-Number.isSafeInteger(0);                // true
-Number.isSafeInteger(1000000000000000);  // true
-Number.isSafeInteger(0.5);               // false
-Number.isSafeInteger('123');             // false
-Number.isSafeInteger(Infinity);          // false
-```
-
-### 28.3.4 Number.prototype.toExponential
-
-- 숫자를 지수 표기법으로 문자열로 변환.
-- 지수 표기법은 매우 크거나 작은 수를 e(Exponent) 앞에 10의 승을 곱하는 형식으로 나타냄.
-
-```js
-(77.1234).toExponential();   // "7.71234e+1"
-(77.1234).toExponential(4);  // "7.7123e+1"
-(77.1234).toExponential(2);  // "7.71e+1"
-```
-
-- 숫자 리터럴 뒤에 `.`이 바로 나오면 프로퍼티 접근으로 해석되므로 괄호로 감싸야 함.
-
-```js
-(77).toExponential(); // "7.7e+1"
-```
-
-- 인수가 안전한 정수인지 검사하여 불리언 값 반환.
-- 안전한 정수는 -(2^53 - 1)과 2^53 - 1 사이의 값.
-
-```js
-Number.isSafeInteger(0);                // true
-Number.isSafeInteger(1000000000000000);  // true
-Number.isSafeInteger(0.5);               // false
-Number.isSafeInteger('123');             // false
-Number.isSafeInteger(Infinity);          // false
-```
-
-### 28.3.4 Number.prototype.toExponential
-
-- 숫자를 지수 표기법으로 문자열로 변환.
-
-```js
-(77.1234).toExponential();   // "7.71234e+1"
-(77.1234).toExponential(4);  // "7.7123e+1"
-(77.1234).toExponential(2);  // "7.71e+1"
-```
-
-- 주의: 숫자 리터럴 뒤에 `.`이 바로 나오면 프로퍼티 접근으로 해석되므로 괄호로 감싸야 함.
-
-```js
-(77).toExponential(); // "7.7e+1"
-```
-
-### 28.3.5 Number.prototype.toFixed
-
-- 숫자를 고정 소수점 표기법으로 문자열로 변환.
-
-```js
-(12345.6789).toFixed();    // "12346"
-(12345.6789).toFixed(1);   // "12345.7"
-(12345.6789).toFixed(2);   // "12345.68"
-(12345.6789).toFixed(3);   // "12345.679"
-```
-
-### 28.3.6 Number.prototype.toPrecision
-
-- 인수로 전달받은 전체 자릿수까지 유효하게 표현하여 문자열로 변환.
-
-```js
-(12345.6789).toPrecision();    // "12345.6789"
-(12345.6789).toPrecision(1);   // "1e+4"
-(12345.6789).toPrecision(2);   // "1.2e+4"
-(12345.6789).toPrecision(6);   // "12345.7"
-```
-
-### 28.3.7 Number.prototype.toString
-
-- 숫자를 문자열로 변환해 반환. 진법을 지정할 수 있음.
-
-```js
-(10).toString();    // "10"
-(10).toString(2);   // "1010"
-(16).toString(8);   // "20"
-(16).toString(16);  // "10"
+Math.min.apply(null, [1, 2, 3]); // 1
+Math.min(...[1, 2, 3]);          // 1 (ES6 스프레드 문법)
 ```
 
