@@ -9,14 +9,14 @@ const [one, two, three] = arr;
 console.log(one, two, three); // 1 2 3
 ```
 
-- 우변에 배열 리터럴 형태이어야 하며, 할당하지 않으면 에러가 발생한다.
+- 우변은 배열 리터럴 형태이어야 하며, 우변에 이터러블을 할당하지 않으면 에러가 발생한다.
 ```
 const [x, y] = [1, 2];
 const [x, y]; // SyntaxError
 const [a, b] = {}; // TypeError
 ```
 
-- 배열 디스트럭처링 할당의 기준은 배열의 인덱스다. 즉, 순서대로 할당된다.
+- 배열 디스트럭처링 할당의 기준은 배열의 인덱스이므로 변수의 개수와 이터러블의 개수가 일치할 필요는 없다. 
 ```
 const [a, b] = [1, 2];
 console.log(a, b) // 1 2
@@ -79,14 +79,14 @@ const {lastName, firstName}; // SyntaxError
 const {lastName, firstName} = null; // TypeError
 ```
 
-- 위 예제에서 객체 리터럴 형태로 선언한 변구 lastName, firstName이다. 프로퍼티 축약 표현을 통해 선언한 것이다.
+- 위 예제에서 객체 리터럴 형태로 선언한 변수는 lastName, firstName이다. 이렇게 객체 리터럴 형태로 선언한 변수는 프로퍼티 축약 표현을 통해 선언한 것이다.
 ```
 const { lastName, firstName } = user;
 // 위와 아래는 동치다.
 const { lastName: lastName, firstName: firstName } = user;
 ```
 
-- 객체의 프로퍼티 키와 다른 변수 이름으로 프로퍼티 값을 할당받으려면 다음과 같이 변수를 선언한다.
+- 따라서 객체의 프로퍼티 키와 다른 변수 이름으로 프로퍼티 값을 할당받으려면 다음과 같이 변수를 선언한다.
 ```
 const user = {
   firstName: 'Ungmo',
