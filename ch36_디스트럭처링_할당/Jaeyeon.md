@@ -139,6 +139,8 @@ const todos = [
 ];
 
 // todos 배열의 두 번째 요소인 객체로부터 id 프로퍼티만 추출한다.
+// , 는 첫 번째 요소를 무시하라는 뜻
+// 두 번째 요소에서 id 만 추출
 const [, { id }] = todos;
 console.log(id); // 2
 ```
